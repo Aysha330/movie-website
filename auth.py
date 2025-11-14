@@ -2,14 +2,22 @@ from flask import Blueprint, request, jsonify, render_template, redirect, url_fo
 import mysql.connector
 
 auth_bp = Blueprint('auth', __name__)
+import psycopg2
+from psycopg2.extras import RealDictCursor
+import urllib.parse as urlparse
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="ainu@3386",  # change this
-    database="movienest_db"
+DATABASE_URL = "postgresql://ayisha:zz5ffyGUpRml2QhdMcAo2pQAGNlj8hxz@dpg-d4blgujipnbc73a65ug0-a.singapore-postgres.render.com/movienest_db"
+url = urlparse.urlparse(DATABASE_URL)
+
+mydb = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port or 5432
 )
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(cursor_factory=RealDictCursor)
+
 
 # ✅ Show registration form
 @auth_bp.route('/register', methods=['GET'])
@@ -46,9 +54,9 @@ def login_user():
     user = mycursor.fetchone()
 
     if user:
-        session['user_id'] = user[0]
-        session['username'] = user[1]
-        session['email'] = user[2]
+        session['user_id'] = user['id']
+        session['username'] = user['username']
+        session['email'] = user['email']
         return redirect(url_for('home'))
     else:
         # Instead of returning a new page, render login.html again with an error message

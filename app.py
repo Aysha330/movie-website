@@ -2,19 +2,35 @@ from flask import Flask, jsonify, request, render_template, redirect, url_for, s
 import requests
 import mysql.connector
 from auth import auth_bp
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 app = Flask(__name__)
 app.register_blueprint(auth_bp)
 app.secret_key = "supersecretkey"  # needed for session management
 
-# ✅ Connect to MySQL database
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="ainu@3386",  # change this to your actual password
-    database="movienest_db"
+import psycopg2
+from psycopg2.extras import RealDictCursor
+import urllib.parse as urlparse
+
+DATABASE_URL = "postgresql://ayisha:zz5ffyGUpRml2QhdMcAo2pQAGNlj8hxz@dpg-d4blgujipnbc73a65ug0-a.singapore-postgres.render.com/movienest_db"
+
+# Parse the URL
+url = urlparse.urlparse(DATABASE_URL)
+
+# Connect to the Postgres database
+db = psycopg2.connect(
+    database=url.path[1:],       # "movienest_db"
+    user=url.username,           # "ayisha"
+    password=url.password,       # your password
+    host=url.hostname,           # "dpg-d4blgujipnbc73a65ug0-a.singapore-postgres.render.com"
+    port=url.port or 5432
 )
-cursor = db.cursor(dictionary=True)
+
+cursor = db.cursor(cursor_factory=RealDictCursor)
+
+
+
 
 TMDB_API_KEY = "dcd237164402f65274a94d11e130246c"
 
