@@ -9,15 +9,14 @@ app = Flask(__name__)
 app.register_blueprint(auth_bp)
 import os
 
-app.secret_key = os.environ.get("SECRET_KEY", "fallback_secret_key")# needed for session management
-
+app.secret_key = "supersecretkey"
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import urllib.parse as urlparse
 
 import os
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = "postgresql://ayisha:zz5ffyGUpRml2QhdMcAo2pQAGNlj8hxz@dpg-d4blgujipnbc73a65ug0-a.singapore-postgres.render.com/movienest_db"
 # Parse the URL
 url = urlparse.urlparse(DATABASE_URL)
 
