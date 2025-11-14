@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>� Search Movies🎬</title>
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='popular.css') }}">
+</head>
+<body>
+
+<h1>SEARCH MOVIES</h1>
+<a href="/" class="nav-btn">🏠 Home</a>
+<a href="/watchlist" class="nav-btn">📃 Watchlist</a>
+<a href="/watched" class="nav-btn">✅ Watched</a>
+
+<!-- 🗣️ Language Search -->
+<div class="search-wrapper">
+  <input type="text" id="languageSearch" placeholder="Search language...">
+</div>
+
+<!-- Genres -->
+<div id="genreList"></div>
+<div class="selectedGenres" id="selectedGenres"></div>
+
+<!-- Movie Cards -->
+<div class="cards-container" id="results">
+{% for movie in movies %}
+<div class="movieCard" data-title="{{movie.title}}" data-year="{{movie.year}}" data-poster="{{movie.poster}}" data-overview="{{movie.overview}}">
+    <img src="{{movie.poster}}" alt="{{movie.title}}">
+    <h4>{{movie.title}} ({{movie.year}})</h4>
+</div>
+{% endfor %}
+</div>
+
+<!-- Modal -->
+<div id="modalOverlay">
+    <div id="movieModal">
+        <h2 id="modalTitle"></h2>
+        <p id="modalYear"></p>
+        <img id="modalPoster" src="">
+        <p id="modalOverview"></p>
+        <button id="watchlistBtn">+ Add to Watchlist</button>
+        <button id="watchedBtn"> Mark as Watched</button>
+        <button id="closeBtn">Close</button>
+    </div>
+</div>
+
+<script>
+const GENRES = {"Action":28,"Adventure":12,"Animation":16,"Comedy":35,"Crime":80,"Documentary":99,"Drama":18,"Family":10751,"Fantasy":14,"History":36,"Horror":27,"Music":10402,"Mystery":9648,"Romance":10749,"Science Fiction":878,"TV Movie":10770,"Thriller":53,"War":10752,"Western":37};
+let selectedGenres = [], currentPage = 1, loading = false;
+let selectedLanguage = ""; // currently selected language
+
+function openModal(movie){
+    $("#modalTitle").text(movie.title);
+    $("#modalYear").text(movie.year);
+    $("#modalPoster").attr("src", movie.poster);
+    $("#modalOverview").text(movie.overview);
+    $("#modalOverlay").fadeIn();
+
+    $.get("/check_status?title="+encodeURIComponent(movie.title), function(resp){
+        let in_watchlist = resp.in_watchlist;
+        let in_watched = resp.in_watched;
+        $("#watchlistBtn").text(in_watchlist ? "Added ✓" : "+ Add to Watchlist");
+        $("#watchedBtn").text(in_watched ? "Watched ✓" : " Mark as Watched");
+
+        $("#watchlistBtn").off("click").on("click", function(){
+            $.post("/toggle_watchlist", movie, function(r){
+                in_watchlist = !in_watchlist;
+                $("#watchlistBtn").text(in_watchlist ? "Added ✓" : "+ Add to Watchlist");
+            });
+        });
+
+        $("#watchedBtn").off("click").on("click", function(){
+            $.post("/toggle_watched", movie, function(r){
+                in_watched = !in_watched;
+                $("#watchedBtn").text(in_watched ? "Watched ✓" : " Mark as Watched");
+            });
+        });
+    });
+
+    $("#closeBtn").off("click").on("click", function(){
+        $("#modalOverlay").fadeOut();
+    });
+
+    // Close modal when clicking outside
+    $("#modalOverlay").click(function(e){
+        if(e.target === this) { 
+            $(this).fadeOut();
+        }
+    });
+}
+
+function fetchMovies(page=1, append=false){
+    loading=true;
+    let url = "/popular/search?page="+page;
+
+    if(selectedGenres.length > 0){
+        const genreIds = selectedGenres.map(g=>GENRES[g]).join(",");
+        url += "&genres=" + genreIds;
+    }
+
+    if(selectedLanguage){
+        url += "&language=" + encodeURIComponent(selectedLanguage);
+    }
+
+    $.get(url, function(data){
+        if(!append) $("#results").empty();
+        data.forEach(movie=>{
+            const card = $(`<div class="movieCard" data-title="${movie.title}" data-year="${movie.year}" data-poster="${movie.poster}" data-overview="${movie.overview}">
+                <img src="${movie.poster}" alt="${movie.title}">
+                <h4>${movie.title} (${movie.year})</h4>
+            </div>`);
+            card.click(()=>openModal(movie));
+            $("#results").append(card);
+        });
+        loading=false;
+    });
+}
+
+// Genres buttons
+for(let g in GENRES){
+    const btn = $(`<div class="genreBtn">${g}</div>`);
+    btn.click(()=>{ 
+        if(!selectedGenres.includes(g)){ 
+            selectedGenres.push(g); 
+            renderSelectedGenres(); 
+            currentPage=1; 
+            fetchMovies(); 
+        } 
+    });
+    $("#genreList").append(btn);
+}
+
+function renderSelectedGenres(){
+    $("#selectedGenres").empty();
+    selectedGenres.forEach(g=>{
+        const chip = $(`<div class="chip">${g} ❌</div>`);
+        chip.click(()=>{
+            selectedGenres = selectedGenres.filter(x=>x!==g); 
+            renderSelectedGenres(); 
+            currentPage=1; 
+            fetchMovies();
+        });
+        $("#selectedGenres").append(chip);
+    });
+}
+
+// Infinite scroll
+$(window).scroll(function(){
+    if(loading) return;
+    if($(window).scrollTop()+$(window).height() >= $(document).height()-100){
+        currentPage++;
+        fetchMovies(currentPage,true);
+    }
+});
+
+// Language search button
+$("#languageBtn").click(function(){
+    selectedLanguage = $("#languageInput").val().trim().toLowerCase();
+    currentPage=1;
+    fetchMovies();
+});
+// Trigger language search on Enter key (desktop & mobile)
+let typingTimer;
+const typingDelay = 500; // milliseconds
+
+$("#languageSearch").on("input", function(){
+    clearTimeout(typingTimer);
+    const value = $(this).val().trim().toLowerCase();
+    typingTimer = setTimeout(() => {
+        selectedLanguage = value;
+        currentPage = 1;
+        fetchMovies();
+    }, typingDelay);
+});
+// Preloaded cards modal
+$(".movieCard").click(function(){
+    const movie = {
+        title: $(this).data("title"),
+        year: $(this).data("year"),
+        poster: $(this).data("poster"),
+        overview: $(this).data("overview")
+    };
+    openModal(movie);
+});
+</script>
+
+</body>
+</html>

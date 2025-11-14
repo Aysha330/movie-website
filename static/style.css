@@ -1,0 +1,248 @@
+/* 🌑 GLOBAL THEME MATCHING LOGIN PAGE */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: url('/static/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.899);
+    z-index: -1;
+}
+
+/* 🏷 MAIN HEADING */
+.index-title  {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 85px;
+    letter-spacing: 7px;
+    margin-top: 60px;
+    color: #c10a14;
+    text-shadow: 0 0 25px rgba(229, 9, 20, 0.5);
+    text-align: center;
+}
+
+/* 🔘 NAVIGATION BUTTONS */
+.nav-btn {
+    display: inline-block;
+    margin: 10px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    background: rgba(20, 20, 20, 0.7);
+    border-left: 3px solid #a6050d;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 1px;
+    min-width: 160px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+    transition: 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: rgba(30, 30, 30, 0.9);
+    transform: translateY(-2px);
+}
+
+/* 🔎 SEARCH BAR */
+#searchBox {
+    width: 90%;
+    max-width: 350px;
+    padding: 12px 16px;
+    margin: 20px auto;
+    border-radius: 50px;
+    background: #111;
+    border: 1px solid #a6050d;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+#searchBox:focus {
+    outline: 2px solid #a6050d;
+}
+
+/* 🎬 MOVIE CARDS */
+.movieCard {
+    background: rgba(20, 20, 20, 0.85);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 12px;
+    width: 180px;
+    cursor: pointer;
+    border-left: 3px solid #a6050d;
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    transition: 0.3s ease;
+}
+
+.movieCard:hover {
+    transform: scale(1.05);
+    background: rgba(25, 25, 25, 0.95);
+}
+
+.movieCard img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* MOVIE CARD GRID */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* 🔥 MODAL OVERLAY */
+#modalOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 500;
+    padding: 20px;
+}
+
+#movieModal {
+    background: rgba(20,20,20,0.9);
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    max-height: 85vh;       /* ✅ limit height */
+    overflow-y: auto;       /* ✅ enable scrolling */
+    margin: auto;
+    color: white;
+    border-left: 3px solid #a6050d;
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.23);
+}
+#movieModal::-webkit-scrollbar {
+    display: none;
+}
+#movieModal img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* BUTTONS */
+button {
+    border: none;
+    padding: 10px 18px;
+    margin-top: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #a6050d;
+    color: white;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #91050c;
+    transform: translateY(-2px);
+}
+
+/* REMOVE BUTTON */
+.remove-btn {
+    background: #333;
+}
+
+.remove-btn:hover {
+    background: #444;
+}
+
+/* 👤 PROFILE BUTTON */
+.profile-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #ffffff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(255, 10, 27, 0.4);
+    transition: 0.3s ease;
+}
+
+.profile-btn:hover {
+    background: #fffeff;
+    transform: scale(1.1);
+}
+
+/* 🟥 PROFILE SIDEBAR */
+.profile-panel {
+    position: fixed;
+    top: 0;
+    left: -270px;
+    width: 270px;
+    height: 100vh;
+    background: rgba(20,20,20,0.97);
+    border-right: 3px solid #ffffff;
+    color: white;
+    box-shadow: 0 0 20px rgba(248, 248, 248, 0.2);
+    transition: 0.35s ease;
+    z-index: 2000;
+}
+
+.profile-panel.open {
+    left: 0;
+}
+
+/* INSIDE SIDEBAR */
+.profile-header, .profile-content, .profile-footer {
+    padding: 20px;
+}
+
+.close-btn {
+    font-size: 28px;
+    cursor: pointer;
+    color: #a6050d;
+}
+
+/* SIDEBAR BUTTONS */
+.profile-action,
+.profile-actionn {
+    background: #a6050d;
+    padding: 12px;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    margin-top: 12px;
+    text-decoration: none;
+    display: block;
+    transition: 0.3s;
+}
+
+.profile-action:hover,
+.profile-actionn:hover {
+    background: #91050c;
+}
+
+/* Force center alignment for everything */
+.main-container {
+    text-align: center;
+    width: 100%;
+}

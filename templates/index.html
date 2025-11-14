@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieNest 🎬</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<div class="main-container">
+    <!-- Heading -->
+    <h1 class="index-title">MOVIENEST</h1>
+
+
+    <!-- Navigation Buttons -->
+    <a href="/watchlist" class="nav-btn">📃 My Watchlist</a>
+    <a href="/watched" class="nav-btn">✅ Already Watched</a>
+    <a href="/popular" class="nav-btn">🔍 Search Movies</a>
+
+    <br><br>
+
+    <!-- Search Bar -->
+    <input type="text" id="searchBox" placeholder="Type movie name..." autocomplete="off">
+</div>
+    <!-- Profile Button -->
+    <button onclick="toggleSidebar()" class="profile-btn">👤</button>
+
+    <!-- Profile Side Panel -->
+    <div id="profilePanel" class="profile-panel">
+        <div class="profile-header">
+            <h3>User Profile</h3>
+            <span id="closePanel" class="close-btn">&times;</span>
+        </div>
+
+        <div class="profile-content">
+            <p><strong>Name:</strong> {{ session.get('username', 'Guest') }}</p>
+            <p><strong>Email:</strong> {{ session.get('email', 'guest@example.com') }}</p>
+        </div>
+
+        <div class="profile-footer">
+            <a href="{{ url_for('logout') }}" class="profile-action">Logout</a>
+            <a href="{{ url_for('auth.login_form') }}" class="profile-actionn">Login as another</a>
+        </div>
+    </div>
+
+    <!-- Movie Cards -->
+    <div class="cards-container" id="results">
+        {% for movie in movies %}
+        <div class="movieCard"
+             data-title="{{ movie.title }}"
+             data-year="{{ movie.year }}"
+             data-poster="{{ movie.poster }}"
+             data-overview="{{ movie.overview }}">
+            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+            <h4>{{ movie.title }} ({{ movie.year }})</h4>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Modal -->
+    <div id="modalOverlay">
+        <div id="movieModal">
+            <h2 id="modalTitle"></h2>
+            <p id="modalYear"></p>
+            <img id="modalPoster" src="">
+            <p id="modalOverview"></p>
+
+            <div>
+                <button id="watchlistBtn">+ Add to Watchlist</button>
+                <button id="watchedBtn">Mark as Watched</button>
+                <button id="closeBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+$(document).ready(function() {
+
+    /* -------------------- SIDEBAR -------------------- */
+    window.toggleSidebar = function() {
+        $("#profilePanel").toggleClass("open");
+    }
+
+    $("#closePanel").click(function() {
+        $("#profilePanel").removeClass("open");
+    });
+
+
+    /* -------------------- MODAL -------------------- */
+    $("#modalOverlay").click(function(e){
+        if (e.target === this) $("#modalOverlay").fadeOut();
+    });
+
+    function openModal(movie){
+        $("#modalTitle").text(movie.title);
+        $("#modalYear").text(movie.year);
+        $("#modalPoster").attr("src", movie.poster.replace('/w200','/w500'));
+        $("#modalOverview").text(movie.overview);
+        $("#modalOverlay").fadeIn();
+
+        $.get("/check_status?title="+encodeURIComponent(movie.title), function(resp){
+            let in_watchlist = resp.in_watchlist;
+            let in_watched = resp.in_watched;
+
+            $("#watchlistBtn").text(in_watchlist ? "Added ✓" : "+ Add to Watchlist");
+            $("#watchedBtn").text(in_watched ? "Watched ✓" : "Mark as Watched");
+
+            $("#watchlistBtn").off("click").on("click", function(){
+                $.post("/toggle_watchlist", movie, function(){
+                    in_watchlist = !in_watchlist;
+                    $("#watchlistBtn").text(in_watchlist ? "Added ✓" : "+ Add to Watchlist");
+                });
+            });
+
+            $("#watchedBtn").off("click").on("click", function(){
+                $.post("/toggle_watched", movie, function(){
+                    in_watched = !in_watched;
+                    $("#watchedBtn").text(in_watched ? "Watched ✓" : "Mark as Watched");
+                });
+            });
+
+        });
+
+        $("#closeBtn").off("click").on("click", function(){
+            $("#modalOverlay").fadeOut();
+        });
+    }
+
+
+    /* -------------------- POPULAR MOVIES -------------------- */
+    let currentPage = 1;
+    let loading = false;
+
+    function fetchPopular(page=1, append=false){
+        loading = true;
+
+        $.get("/popular/search?page=" + page, function(data){
+            if (!append) $("#results").empty();
+
+            data.forEach(function(movie){
+                let card = $(`
+                    <div class="movieCard"
+                     data-title="${movie.title}"
+                     data-year="${movie.year}"
+                     data-poster="${movie.poster}"
+                     data-overview="${movie.overview}">
+                        <img src="${movie.poster.replace('/w200','/w500')}" alt="${movie.title}">
+                        <h5>${movie.title} (${movie.year})</h5>
+                    </div>
+                `);
+                $("#results").append(card);
+            });
+
+            loading = false;
+        });
+    }
+
+    fetchPopular();
+
+    $(window).scroll(function(){
+        if (loading) return;
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100){
+            currentPage++;
+            fetchPopular(currentPage, true);
+        }
+    });
+
+
+    /* -------------------- CARD CLICK -------------------- */
+    $(document).on("click", ".movieCard", function(){
+        const movie = {
+            title: $(this).data("title"),
+            year: $(this).data("year"),
+            poster: $(this).data("poster"),
+            overview: $(this).data("overview")
+        };
+        openModal(movie);
+    });
+
+
+    /* -------------------- SEARCH -------------------- */
+    $("#searchBox").on("input", function(){
+        let query = $(this).val();
+
+        if (query.length > 0){
+            $.get("/search?q=" + encodeURIComponent(query), function(data){
+                $("#results").empty();
+
+                data.forEach(function(movie){
+                    let card = $(`
+                        <div class="movieCard"
+                         data-title="${movie.title}"
+                         data-year="${movie.year}"
+                         data-poster="${movie.poster}"
+                         data-overview="${movie.overview}">
+                            <img src="${movie.poster.replace('/w200','/w500')}" alt="${movie.title}">
+                            <h5>${movie.title} (${movie.year})</h5>
+                        </div>
+                    `);
+                    $("#results").append(card);
+                });
+            });
+        } else {
+            currentPage = 1;
+            fetchPopular();
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

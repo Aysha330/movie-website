@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Already Watched</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='watched.css') }}">
+</head>
+<body>
+    <h1> Already Watched</h1>
+
+    <!-- 🧭 Navigation Buttons -->
+    <a href="/" class="nav-btn">🏠 Home</a>
+    <a href="/watchlist" class="nav-btn">📃 My Watchlist</a>
+
+    <!-- 🎞️ Watched Movies -->
+    <div class="cards-container" id="results">
+        {% for movie in movies %}
+        <div class="movieCard" 
+             data-title="{{ movie.title }}" 
+             data-year="{{ movie.year }}" 
+             data-poster="{{ movie.poster }}" 
+             data-overview="{{ movie.overview }}">
+            
+            <!-- Use higher resolution poster -->
+            <img src="{{ movie.poster.replace('/w200','/w500') if movie.poster else url_for('static', filename='placeholder.png') }}" alt="{{ movie.title }}">
+
+            <h4>{{ movie.title }} ({{ movie.year }})</h4>
+            <button class="removeButton remove-btn">❌ Remove</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- 🎬 Modal -->
+    <div id="modalOverlay">
+        <div id="movieModal">
+            <h2 id="modalTitle"></h2>
+            <p id="modalYear"></p>
+            <img id="modalPoster" src="">
+            <p id="modalOverview"></p>
+            <button id="closeButton">Close</button>
+        </div>
+    </div>
+
+<script>
+$(document).ready(function(){
+
+    // 🎥 Show movie modal
+    $(".movieCard").click(function(){
+        let m = {
+            title: $(this).data("title"),
+            year: $(this).data("year"),
+            poster: $(this).data("poster").replace('/w200','/w500'),
+            overview: $(this).data("overview")
+        };
+
+        $("#modalTitle").text(m.title);
+        $("#modalYear").text(m.year);
+        $("#modalPoster").attr("src", m.poster);
+        $("#modalOverview").text(m.overview);
+        $("#modalOverlay").fadeIn();
+    });
+
+    $("#closeButton").click(function(){
+        $("#modalOverlay").fadeOut();
+    });
+          // Close modal when clicking outside the modal content
+    $("#modalOverlay").click(function(e){
+        if(e.target === this) { // only if clicked on the overlay, not inside modal
+            $(this).fadeOut();
+        }
+    });
+
+
+    // ❌ Remove from watched instantly
+    $(".removeButton").click(function(e){
+        e.stopPropagation(); // Prevent triggering modal
+        let movieCard = $(this).closest(".movieCard");
+        let title = movieCard.data("title");
+
+        $.post("/remove_from_watched", {title: title}, function(response){
+            // Fade out and remove card instantly
+            movieCard.fadeOut(300, function(){
+                $(this).remove();
+            });
+        });
+    });
+
+});
+</script>
+
+</body>
+</html>

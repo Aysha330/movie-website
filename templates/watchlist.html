@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🍿 My Watchlist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='watchlist.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1> My Watchlist</h1>
+
+    <div class="nav-buttons">
+      <a href="/" class="nav-btn">🏠 Home</a>
+      <a href="/watched" class="nav-btn">✅ Already Watched</a>
+    </div>
+
+    <div id="results" class="results">
+      {% for movie in movies %}
+      <div class="movieCard" 
+           data-title="{{ movie.title }}" 
+           data-year="{{ movie.year }}" 
+           data-poster="{{ movie.poster }}" 
+           data-overview="{{ movie.overview }}">
+        <img src="{{ movie.poster.replace('/w200','/w500') if movie.poster else url_for('static', filename='placeholder.png') }}" 
+             alt="{{ movie.title }}">
+        <h4>{{ movie.title }} ({{ movie.year }})</h4>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalOverlay" style="display:none;">
+    <div id="movieModal">
+      <h2 id="modalTitle"></h2>
+      <p id="modalYear"></p>
+      <img id="modalPoster" src="" alt="">
+      <p id="modalOverview"></p>
+      <button id="watchedBtn">✅ Mark as Watched</button>
+      <button id="removeBtn">❌ Remove</button>
+      <button id="closeBtn">Close</button>
+    </div>
+  </div>
+
+  <script>
+  $(document).ready(function(){
+
+    function openModal(movie){
+      $("#modalTitle").text(movie.title);
+      $("#modalYear").text(movie.year);
+      $("#modalPoster").attr("src", movie.poster.replace('/w200','/w500'));
+      $("#modalOverview").text(movie.overview);
+      $("#modalOverlay").fadeIn();
+
+   // Toggle watched
+$("#watchedBtn").off("click").on("click", function(){
+  $.post("/toggle_watched", { 
+      title: movie.title, 
+      year: movie.year, 
+      poster: movie.poster, 
+      overview: movie.overview 
+  }, function(resp){
+      if(resp.status === "added"){
+          $("#watchedBtn").text("Watched ✓");
+          // remove card from watchlist view
+          $(`.movieCard[data-title="${movie.title}"]`).fadeOut(300, function(){ $(this).remove(); });
+      } else if(resp.status === "removed"){
+          $("#watchedBtn").text("✅ Mark as Watched");
+      }
+  });
+});
+       // Remove from watchlist
+    $("#removeBtn").off("click").on("click", function(){
+      $.post("/toggle_watchlist", { 
+        title: movie.title, 
+        year: movie.year, 
+        poster: movie.poster, 
+        overview: movie.overview 
+      }, function(resp){
+        // Close modal immediately
+        $("#modalOverlay").fadeOut();
+        // Remove card from page instantly
+        $(`.movieCard[data-title="${movie.title}"]`).fadeOut(300, function(){ $(this).remove(); });
+      });
+    });
+
+    // Close modal
+    $("#closeBtn").off("click").on("click", function(){
+      $("#modalOverlay").fadeOut();
+    });
+          // Close modal when clicking outside the modal content
+    $("#modalOverlay").click(function(e){
+        if(e.target === this) { // only if clicked on the overlay, not inside modal
+            $(this).fadeOut();
+        }
+    });
+
+  }
+    // Click card to open modal
+    $("#results").on("click", ".movieCard", function(){
+      const movie = {
+        title: $(this).data("title"),
+        year: $(this).data("year"),
+        poster: $(this).data("poster"),
+        overview: $(this).data("overview")
+      };
+      openModal(movie);
+    });
+
+  });
+  </script>
+</body>
+</html>
+

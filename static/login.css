@@ -1,0 +1,154 @@
+/* GLOBAL */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: url('/static/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    
+    overflow-x: hidden;
+    position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.893); 
+  z-index: -1;
+}
+
+/* HERO SECTION */
+.hero {
+    text-align: center;
+    padding: 120px 40px 40px;
+    position: relative;
+    z-index: 3;
+}
+
+.hero-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 85px;
+    letter-spacing: 7px;
+    margin-bottom: 10px;
+    color: #c10a14;
+    text-shadow: 0 0 25px rgba(229, 9, 20, 0.5);
+}
+
+.hero-tag {
+    font-size: 22px;
+    opacity: 0.95;
+    margin-bottom: 20px;
+}
+
+.hero-description {
+    max-width: 700px;
+    margin: auto;
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.85;
+}
+
+/* FEATURES */
+.features {
+    margin-top: 60px;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+}
+
+.card {
+    display: inline-block;
+    padding: 12px 22px;
+    margin: 10px;
+    background: rgba(20, 20, 20, 0.8);
+    border-left: 3px solid #99070e;
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+/* LOGIN SECTION */
+.login-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+    padding-bottom: 100px;
+    position: relative;
+    z-index: 3;
+}
+
+.login-box {
+    background: rgba(20, 20, 20, 0.555);
+    padding: 35px;
+    width: 330px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.23);
+    backdrop-filter: blur(6px);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 15px;
+    font-size: 28px;
+    color: #a6050d;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 6px;
+    background: #111;
+    color: white;
+    font-size: 15px;
+}
+
+.login-box input:focus {
+    outline: 2px solid #a6050d;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #a6050d;
+    color: white;
+    font-size: 17px;
+    border-radius: 6px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.login-box button:hover {
+    background: #91050c;
+    transform: translateY(-2px);
+}
+
+.register-text {
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.register-text a {
+    color: #a6050d;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}
+.error-message {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(229, 9, 20, 0.9);
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 500;
+    text-align: center;
+}

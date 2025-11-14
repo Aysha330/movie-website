@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>MovieNest</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="bg-layer"></div>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1 class="hero-title">MOVIENEST</h1>
+
+        <p class="hero-tag">
+            Discover. Explore. Save.<br>
+            Your personal world of cinema.
+        </p>
+
+        <p class="hero-description">
+            MovieNest lets you explore movies across all genres, discover trending titles,
+            search millions of films, and build your very own watchlist — all in one powerful platform.
+        </p>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+        <div class="card">🔥 Find Movies To Watch</div>
+        <div class="card">🎬 Smart Search</div>
+        <div class="card">❤️ Save Favorites</div>
+        <div class="card">📁 Personal Watchlist</div>
+        <div class="card">📱 Works on Any Device</div>
+    </section>
+
+    <!-- LOGIN FORM -->
+    <section class="login-section">
+        <form class="login-box" method="POST" action="/login">
+            <h2>Login</h2>
+
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Password" required />
+
+            <button type="submit">Sign In</button>
+
+            <!-- ERROR MESSAGE -->
+            {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+
+            <script>
+                // auto-hide after 4 seconds
+                setTimeout(() => {
+                    const msg = document.querySelector('.error-message');
+                    if(msg) msg.style.display = 'none';
+                }, 4000);
+            </script>
+            {% endif %}
+
+            <p class="register-text">
+                New here? <a href="/register">Create an account</a>
+            </p>
+        </form>
+    </section>
+
+</body>
+</html>
