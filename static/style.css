@@ -56,21 +56,26 @@ body::before {
 
 /* 🔎 SEARCH BAR */
 #searchBox {
-    width: 90%;
-    max-width: 350px;
-    padding: 12px 16px;
-    margin: 20px auto;
+    width: auto;                  /* shrink to fit max-width */
+    max-width: 300px;             /* limit how wide it can be */
+    min-width: 180px;             /* don't get too tiny */
+    padding: 10px 16px;           /* fixed, looks balanced */
+    margin: 20px auto;            /* center horizontally */
     border-radius: 50px;
     background: #111;
     border: 1px solid #a6050d;
     color: white;
     font-size: 16px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    display: block;
+    text-align: center;
 }
 
 #searchBox:focus {
     outline: 2px solid #a6050d;
 }
+
+
 
 /* 🎬 MOVIE CARDS */
 .movieCard {
@@ -245,4 +250,58 @@ button:hover {
 .main-container {
     text-align: center;
     width: 100%;
+}
+/* 🌟 RESPONSIVE FIXES */
+
+/* MAIN HEADING - scale font on smaller screens */
+.index-title {
+    font-size: clamp(40px, 8vw, 85px); /* min 40px, max 85px, scales with viewport width */
+    margin-top: 40px;
+}
+
+/* MOVIE CARDS - flexible width & height */
+.movieCard {
+    width: clamp(140px, 22%, 180px); /* scales between 140px and 180px based on container */
+}
+
+.movieCard img {
+    height: auto; /* remove fixed height, let image scale naturally */
+    aspect-ratio: 2/3; /* maintain 2:3 ratio for poster */
+}
+
+/* SEARCH BOX - keep it flexible */
+#searchBox {
+    max-width: 90%; /* already flexible, added this for extreme small screens */
+}
+
+/* PROFILE BUTTON - scale for smaller screens */
+.profile-btn {
+    width: clamp(35px, 8vw, 42px);
+    height: clamp(35px, 8vw, 42px);
+    font-size: clamp(16px, 4vw, 20px);
+}
+
+/* PROFILE SIDEBAR - scale width on smaller screens */
+.profile-panel {
+    width: clamp(220px, 60%, 270px);
+}
+
+/* MOVIE MODAL - responsive width */
+#movieModal {
+    width: clamp(280px, 80%, 400px);
+}
+
+/* ADD GAP BETWEEN BUTTONS AND CARDS ON SMALL SCREENS */
+.cards-container {
+    gap: clamp(8px, 2vw, 12px);
+}
+
+/* Optional: Reduce modal padding on small screens */
+@media (max-width: 480px) {
+    #movieModal {
+        padding: 12px;
+    }
+    .profile-header, .profile-content, .profile-footer {
+        padding: 12px;
+    }
 }

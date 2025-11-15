@@ -11,7 +11,6 @@ body {
   position: relative;
 }
 
-/* dark overlay like login */
 body::before {
   content: "";
   position: fixed;
@@ -23,17 +22,17 @@ body::before {
   z-index: -1;
 }
 
-/* MAIN PAGE TITLE — MATCH LOGIN STYLE */
+/* MAIN PAGE TITLE */
 h1 {
   margin-top: 40px;
   font-family: "Bebas Neue", sans-serif;
-  font-size: 60px;
-  letter-spacing: 6px;
+  font-size: clamp(32px, 4vw, 60px);
+  letter-spacing: 0.15em;
   color: #c10a14;
   text-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
 }
 
-/* NAV BUTTONS — keep same structure but match login style */
+/* NAV BUTTONS */
 .nav-btn {
   display: inline-block;
   margin: 10px;
@@ -44,8 +43,8 @@ h1 {
   color: #fff;
   text-decoration: none;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  min-width: 160px;
+  letter-spacing: 0.05em;
+  min-width: 120px;
   text-align: center;
   box-shadow: 0 0 12px rgba(0,0,0,0.6);
   transition: 0.3s ease;
@@ -53,13 +52,13 @@ h1 {
 
 .nav-btn:hover {
   background: rgba(30,30,30,0.95);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
-/* SEARCH BAR — match login input style but keep your function */
+/* SEARCH BAR */
 #languageSearch {
   width: 100%;
-  max-width: 350px;
+  max-width: 350px; /* limit size on large screens */
   padding: 12px 16px;
   margin: 25px auto;
   background: rgba(20,20,20,0.8);
@@ -79,7 +78,7 @@ h1 {
   outline: 2px solid #a6050d;
 }
 
-/* MOVIE CARDS — give them login glassy style */
+/* MOVIE CARDS */
 .cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -112,7 +111,7 @@ h1 {
   border-radius: 10px;
 }
 
-/* MODAL OVERLAY */
+/* MODAL */
 #modalOverlay {
   display: none;
   position: fixed;
@@ -123,68 +122,71 @@ h1 {
   padding: 20px 0;
 }
 
-/* MODAL BOX */
 #movieModal {
-    background: rgba(20,20,20,0.9);
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 400px;
-    max-height: 85vh;
-    overflow-y: auto;       
-    margin: auto;
-    color: white;
-    border-left: 3px solid #a6050d;
-    box-shadow: 0 0 20px rgba(229, 9, 20, 0.23);
-
-    scrollbar-width: none;    /* Firefox hides scrollbar */
+  background: rgba(20,20,20,0.9);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  max-height: 85vh;
+  overflow-y: auto;
+  margin: auto;
+  color: white;
+  border-left: 3px solid #a6050d;
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.23);
+  scrollbar-width: none;
 }
 
 #movieModal::-webkit-scrollbar {
-    display: none;           /* Chrome, Safari, Edge */
+  display: none;
 }
+
 #movieModal img {
   width: 100%;
   border-radius: 8px;
   margin-bottom: 10px;
 }
 
-
-
 /* BUTTONS */
+button, .genreBtn {
+  border: none;
+  padding: 10px 18px;
+  margin-top: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
 button {
-    border: none;
-    padding: 10px 18px;
-    margin-top: 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #a6050d;
-    color: white;
-    font-size: 15px;
-    transition: 0.2s;
+  background: #a6050d;
+  color: white;
 }
 
 button:hover {
-    background: #91050c;
-    transform: translateY(-2px);
+  background: #91050c;
+  transform: translateY(-2px);
 }
 
+/* GENRE BUBBLES */
 .genreBtn {
   display: inline-block;
-  padding: 6px 12px;
   background: rgba(20,20,20,0.7);
   color: #fff;
   border-radius: 20px;
-  cursor: pointer;
   margin: 5px;
   border-left: 3px solid #99070e;
   font-size: 14px;
-  white-space: nowrap;   /* Prevent awkward line breaks */
+  white-space: nowrap;
+  max-width: 120px; /* limit size */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .genreBtn:hover {
   background: rgba(30,30,30,0.9);
 }
 
+/* SELECTED GENRES */
 .selectedGenres {
   display: flex;
   gap: 8px;
@@ -199,4 +201,7 @@ button:hover {
   border-radius: 16px;
   cursor: pointer;
   color: white;
+  max-width: 100px; /* limit size */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
