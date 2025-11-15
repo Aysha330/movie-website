@@ -255,3 +255,10 @@ body::before {
         padding: clamp(8px, 3.5vw, 10px);
     }
 }
+/* ONLY CHANGE: HERO / LOGIN TITLE TO MATCH INDEX */
+.login-box h2 {
+    margin-bottom: clamp(10px, 3vw, 15px);
+    font-size: clamp(40px, 8vw, 85px); /* now matches index page title */
+    color: #a6050d;
+    text-align: center;
+}
