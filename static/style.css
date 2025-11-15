@@ -157,33 +157,6 @@ body::before {
     border-radius: 10px;
     margin-bottom: 10px;
 }
-
-/* BUTTONS */
-button {
-    border: none;
-    padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px);
-    margin-top: 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #a6050d;
-    color: white;
-    font-size: clamp(14px, 2.5vw, 16px);
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #91050c;
-    transform: translateY(-2px);
-}
-
-.remove-btn {
-    background: #333;
-}
-
-.remove-btn:hover {
-    background: #444;
-}
-
 /* 👤 PROFILE BUTTON */
 .profile-btn {
     position: fixed;
@@ -198,9 +171,57 @@ button:hover {
     color: white;
     font-size: clamp(16px, 4vw, 20px);
     cursor: pointer;
-    box-shadow: 0 0 12px rgba(255, 10, 27, 0.4);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
     transition: 0.3s ease;
 }
+
+/* BUTTONS */
+/* ALL THREE SPECIAL WHITE BUTTONS */
+#watchlistBtn,
+#watchedBtn,
+#closeBtn
+{
+    border: none;
+    padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px);
+    margin-top: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #880202;
+    color: white;
+    font-size: clamp(14px, 2.5vw, 16px);
+    transition: 0.2s;
+}
+
+#watchlistBtn:hover,
+#watchedBtn:hover,
+#closeBtn:hover {
+    background: #91050c;
+    transform: translateY(-2px);
+}
+#pp {
+     border: none;
+    padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px);
+    margin-top: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #ffffff;
+    color: white;
+    font-size: clamp(14px, 2.5vw, 16px);
+    transition: 0.2s;}
+
+#pp:hover {
+    background: #91050c;
+    transform: translateY(-2px);/* keep consistent hover movement */
+}
+
+.remove-btn {
+    background: #333;
+}
+
+.remove-btn:hover {
+    background: #444;
+}
+
 
 .profile-btn:hover {
     transform: scale(1.1);
