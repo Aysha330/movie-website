@@ -262,7 +262,7 @@ button:hover {
 /* 📱 SMALL SCREENS */
 @media (max-width: 480px) {
     .index-title {
-        font-size: clamp(32px, 8vw, 40px);
+        font-size: clamp(48px, 14vw, 70px);
         margin-top: 30px;
     }
     .movieCard {

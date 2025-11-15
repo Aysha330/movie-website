@@ -258,7 +258,7 @@ body::before {
 /* 📱 MOBILE HERO TITLE ENLARGEMENT */
 @media (max-width: 480px) {
     .hero-title {
-        font-size: clamp(32px, 10vw, 48px); /* bigger than before */
+        font-size: clamp(48px, 14vw, 70px); /* bigger than before */
         letter-spacing: 1px;
     }
 }
