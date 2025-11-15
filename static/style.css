@@ -2,8 +2,11 @@
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
-    background: url('/static/images/bg.jpg') no-repeat center center fixed;
+    background-image: url('/static/images/bg.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
     background-size: cover;
+    -webkit-background-size: cover; /* Safari fix */
     color: #fff;
     overflow-x: hidden;
     position: relative;
@@ -21,11 +24,11 @@ body::before {
 }
 
 /* 🏷 MAIN HEADING */
-.index-title  {
+.index-title {
     font-family: "Bebas Neue", sans-serif;
-    font-size: 85px;
-    letter-spacing: 7px;
-    margin-top: 60px;
+    font-size: clamp(40px, 8vw, 85px); /* scales smoothly */
+    letter-spacing: clamp(2px, 0.8vw, 7px);
+    margin-top: clamp(40px, 5vw, 60px);
     color: #c10a14;
     text-shadow: 0 0 25px rgba(229, 9, 20, 0.5);
     text-align: center;
@@ -35,7 +38,7 @@ body::before {
 .nav-btn {
     display: inline-block;
     margin: 10px;
-    padding: 12px 22px;
+    padding: clamp(10px, 2vw, 16px) clamp(16px, 3vw, 22px);
     border-radius: 10px;
     background: rgba(20, 20, 20, 0.7);
     border-left: 3px solid #a6050d;
@@ -56,16 +59,16 @@ body::before {
 
 /* 🔎 SEARCH BAR */
 #searchBox {
-    width: auto;                  /* shrink to fit max-width */
-    max-width: 300px;             /* limit how wide it can be */
-    min-width: 180px;             /* don't get too tiny */
-    padding: 10px 16px;           /* fixed, looks balanced */
-    margin: 20px auto;            /* center horizontally */
+    width: 90%;                 
+    max-width: 300px;            
+    min-width: 140px;            
+    padding: clamp(8px, 2vw, 12px);           
+    margin: 20px auto;            
     border-radius: 50px;
     background: #111;
     border: 1px solid #a6050d;
     color: white;
-    font-size: 16px;
+    font-size: clamp(14px, 2.5vw, 16px);
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
     display: block;
     text-align: center;
@@ -75,19 +78,21 @@ body::before {
     outline: 2px solid #a6050d;
 }
 
-
-
 /* 🎬 MOVIE CARDS */
 .movieCard {
     background: rgba(20, 20, 20, 0.85);
     border-radius: 12px;
-    padding: 12px;
-    margin: 12px;
-    width: 180px;
+    padding: clamp(10px, 1.5vw, 16px);
+    margin: clamp(8px, 1.5vw, 12px);
+    flex: 1 1 160px; /* responsive width */
+    max-width: 180px;
     cursor: pointer;
     border-left: 3px solid #a6050d;
     box-shadow: 0 0 12px rgba(0,0,0,0.6);
     transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .movieCard:hover {
@@ -97,9 +102,10 @@ body::before {
 
 .movieCard img {
     width: 100%;
-    height: 260px;
+    aspect-ratio: 2/3; /* maintains poster ratio */
     object-fit: cover;
     border-radius: 10px;
+    margin-bottom: 8px;
 }
 
 /* MOVIE CARD GRID */
@@ -107,8 +113,8 @@ body::before {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
-    margin-top: 20px;
+    gap: clamp(8px, 2vw, 12px);
+    margin-top: clamp(12px, 2vw, 20px);
 }
 
 /* 🔥 MODAL OVERLAY */
@@ -127,19 +133,21 @@ body::before {
 
 #movieModal {
     background: rgba(20,20,20,0.9);
-    padding: 20px;
+    padding: clamp(12px, 2vw, 20px);
     border-radius: 12px;
-    max-width: 400px;
-    max-height: 85vh;       /* ✅ limit height */
-    overflow-y: auto;       /* ✅ enable scrolling */
+    width: clamp(280px, 80%, 400px);
+    max-height: 85vh;  
+    overflow-y: auto;  
     margin: auto;
     color: white;
     border-left: 3px solid #a6050d;
     box-shadow: 0 0 20px rgba(229, 9, 20, 0.23);
 }
+
 #movieModal::-webkit-scrollbar {
     display: none;
 }
+
 #movieModal img {
     width: 100%;
     border-radius: 10px;
@@ -149,13 +157,13 @@ body::before {
 /* BUTTONS */
 button {
     border: none;
-    padding: 10px 18px;
+    padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px);
     margin-top: 10px;
     border-radius: 6px;
     cursor: pointer;
     background: #a6050d;
     color: white;
-    font-size: 15px;
+    font-size: clamp(14px, 2.5vw, 16px);
     transition: 0.2s;
 }
 
@@ -164,7 +172,6 @@ button:hover {
     transform: translateY(-2px);
 }
 
-/* REMOVE BUTTON */
 .remove-btn {
     background: #333;
 }
@@ -176,24 +183,22 @@ button:hover {
 /* 👤 PROFILE BUTTON */
 .profile-btn {
     position: fixed;
-    top: 15px;
-    left: 15px;
-    background: #ffffff;
-    width: 42px;
-    height: 42px;
+    top: clamp(10px, 2vw, 15px);
+    left: clamp(10px, 2vw, 15px);
+    width: clamp(35px, 8vw, 42px);
+    height: clamp(35px, 8vw, 42px);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
-    font-size: 20px;
+    font-size: clamp(16px, 4vw, 20px);
     cursor: pointer;
     box-shadow: 0 0 12px rgba(255, 10, 27, 0.4);
     transition: 0.3s ease;
 }
 
 .profile-btn:hover {
-    background: #fffeff;
     transform: scale(1.1);
 }
 
@@ -202,7 +207,7 @@ button:hover {
     position: fixed;
     top: 0;
     left: -270px;
-    width: 270px;
+    width: clamp(220px, 60%, 270px);
     height: 100vh;
     background: rgba(20,20,20,0.97);
     border-right: 3px solid #ffffff;
@@ -216,26 +221,24 @@ button:hover {
     left: 0;
 }
 
-/* INSIDE SIDEBAR */
 .profile-header, .profile-content, .profile-footer {
-    padding: 20px;
+    padding: clamp(12px, 2vw, 20px);
 }
 
 .close-btn {
-    font-size: 28px;
+    font-size: clamp(24px, 4vw, 28px);
     cursor: pointer;
     color: #a6050d;
 }
 
-/* SIDEBAR BUTTONS */
 .profile-action,
 .profile-actionn {
     background: #a6050d;
-    padding: 12px;
+    padding: clamp(10px, 2vw, 12px);
     text-align: center;
     border-radius: 10px;
     color: white;
-    margin-top: 12px;
+    margin-top: clamp(8px, 2vw, 12px);
     text-decoration: none;
     display: block;
     transition: 0.3s;
@@ -251,53 +254,20 @@ button:hover {
     text-align: center;
     width: 100%;
 }
-/* 🌟 RESPONSIVE FIXES */
 
-/* MAIN HEADING - scale font on smaller screens */
-.index-title {
-    font-size: clamp(40px, 8vw, 85px); /* min 40px, max 85px, scales with viewport width */
-    margin-top: 40px;
-}
-
-/* MOVIE CARDS - flexible width & height */
-.movieCard {
-    width: clamp(140px, 22%, 180px); /* scales between 140px and 180px based on container */
-}
-
-.movieCard img {
-    height: auto; /* remove fixed height, let image scale naturally */
-    aspect-ratio: 2/3; /* maintain 2:3 ratio for poster */
-}
-
-/* SEARCH BOX - keep it flexible */
-#searchBox {
-    max-width: 90%; /* already flexible, added this for extreme small screens */
-}
-
-/* PROFILE BUTTON - scale for smaller screens */
-.profile-btn {
-    width: clamp(35px, 8vw, 42px);
-    height: clamp(35px, 8vw, 42px);
-    font-size: clamp(16px, 4vw, 20px);
-}
-
-/* PROFILE SIDEBAR - scale width on smaller screens */
-.profile-panel {
-    width: clamp(220px, 60%, 270px);
-}
-
-/* MOVIE MODAL - responsive width */
-#movieModal {
-    width: clamp(280px, 80%, 400px);
-}
-
-/* ADD GAP BETWEEN BUTTONS AND CARDS ON SMALL SCREENS */
-.cards-container {
-    gap: clamp(8px, 2vw, 12px);
-}
-
-/* Optional: Reduce modal padding on small screens */
+/* 📱 SMALL SCREENS */
 @media (max-width: 480px) {
+    .index-title {
+        font-size: clamp(32px, 8vw, 40px);
+        margin-top: 30px;
+    }
+    .movieCard {
+        flex: 1 1 140px;
+        max-width: 160px;
+    }
+    .movieCard img {
+        aspect-ratio: 2/3;
+    }
     #movieModal {
         padding: 12px;
     }
