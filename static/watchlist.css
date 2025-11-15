@@ -9,6 +9,10 @@ body {
   text-align: center;
   color: #fff;
   position: relative;
+    /* fallback for Safari/iOS */
+    -webkit-background-size: cover;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
 }
 
 /* dark overlay */

@@ -9,6 +9,10 @@ body {
   text-align: center;
   color: #fff;
   position: relative;
+    /* fallback for Safari/iOS */
+    -webkit-background-size: cover;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
 }
 
 body::before {
@@ -204,4 +208,67 @@ button:hover {
   max-width: 100px; /* limit size */
   overflow: hidden;
   text-overflow: ellipsis;
+}
+/* 📱 PHONE FRIENDLY ADJUSTMENTS */
+@media (max-width: 480px) {
+
+  /* Main title smaller and fits screen */
+  h1 {
+    font-size: clamp(24px, 8vw, 36px);
+    margin-top: 25px;
+  }
+
+  /* Navigation buttons smaller and wrap nicely */
+  .nav-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    min-width: 100px;
+  }
+
+  /* Search box fits screen */
+  #languageSearch {
+    max-width: 90%;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  /* Movie cards smaller and wrap better */
+  .movieCard {
+    width: clamp(140px, 40%, 160px);
+    padding: 10px;
+  }
+
+  .movieCard img {
+    height: auto; /* allow scaling */
+    aspect-ratio: 2/3; /* maintain poster ratio */
+  }
+
+  /* Card grid gap smaller */
+  .cards-container {
+    gap: 8px;
+  }
+
+  /* Modal smaller and fits screen */
+  #movieModal {
+    width: 90%;
+    max-width: 300px;
+    padding: 12px;
+  }
+
+  /* Buttons smaller */
+  button, .genreBtn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  /* Genre bubbles smaller */
+  .genreBtn {
+    max-width: 90px;
+    font-size: 12px;
+  }
+
+  .selectedGenres .chip {
+    max-width: 80px;
+    font-size: 12px;
+  }
 }

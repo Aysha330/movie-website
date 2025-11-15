@@ -14,7 +14,11 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    -webkit-background-size: cover; /* Safari fix */
+     /* Safari fix */
+    position: relative;
+      /* fallback for Safari/iOS */
+    -webkit-background-size: cover;
+    -webkit-overflow-scrolling: touch;
     position: relative;
 }
 
@@ -73,8 +77,8 @@ body::before {
 
 .card {
     flex: 1 1 200px;
-    max-width: 250px;
-    padding: clamp(12px, 1.5vw, 22px);
+    max-width: 200px;
+    padding: clamp(10px, 1.3vw, 20px);
     background: rgba(20, 20, 20, 0.8);
     border-left: 3px solid #99070e;
     border-radius: 5px;
@@ -188,5 +192,59 @@ body::before {
     }
     .login-box input, .login-box button {
         font-size: clamp(14px, 4vw, 16px);
+    }
+}
+/* 📱 SMALL PHONES ADJUSTMENTS */
+@media (max-width: 480px) {
+
+    /* HERO SECTION */
+    .hero {
+        padding: clamp(40px, 8vw, 60px) 5% clamp(20px, 5vw, 40px);
+    }
+    .hero-title {
+        font-size: clamp(24px, 7vw, 36px);
+        letter-spacing: 1px;
+    }
+    .hero-tag {
+        font-size: clamp(12px, 4vw, 16px);
+    }
+    .hero-description {
+        font-size: clamp(12px, 4vw, 14px);
+        line-height: 1.4;
+        max-width: 95%;
+    }
+
+    /* FEATURE CARDS */
+    .features {
+        gap: 8px;
+    }
+    .card {
+        flex: 1 1 100%;
+        max-width: 220px;
+        padding: clamp(8px, 3vw, 12px);
+        font-size: clamp(12px, 3.5vw, 14px);
+    }
+
+    /* LOGIN BOX */
+    .login-section {
+        padding-bottom: clamp(30px, 8vw, 60px);
+    }
+    .login-box {
+        width: 95%;
+        padding: clamp(15px, 4vw, 25px);
+    }
+    .login-box h2 {
+        font-size: clamp(18px, 6vw, 22px);
+    }
+    .login-box input, .login-box button {
+        font-size: clamp(14px, 4vw, 16px);
+        padding: clamp(8px, 3vw, 10px);
+    }
+    .register-text {
+        font-size: clamp(12px, 3.5vw, 14px);
+    }
+    .error-message {
+        font-size: clamp(12px, 3.5vw, 14px);
+        padding: clamp(6px, 3vw, 8px);
     }
 }
