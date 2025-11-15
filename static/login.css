@@ -255,3 +255,10 @@ body::before {
         padding: clamp(8px, 3.5vw, 10px);
     }
 }
+/* 📱 MOBILE HERO TITLE ENLARGEMENT */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: clamp(32px, 10vw, 48px); /* bigger than before */
+        letter-spacing: 1px;
+    }
+}
